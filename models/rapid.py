@@ -7,6 +7,8 @@ import torchvision.transforms.functional as tvf
 from utils.iou_mask import iou_mask, iou_rle
 import models.backbones
 import models.losses
+from models.embedding import featEmbedding
+
 
 
 class RAPiD(nn.Module):
@@ -59,26 +61,46 @@ class RAPiD(nn.Module):
         self.pred_M = PredLayer(self.anchors_all, self.index_M, **kwargs)
         self.pred_S = PredLayer(self.anchors_all, self.index_S, **kwargs)
 
-    def forward(self, x, labels=None, **kwargs):
+        self.feat_embedding_small = featEmbedding(256, 2048)
+        self.feat_embedding_medium = featEmbedding(512, 2048)
+        self.feat_embedding_large = featEmbedding(1024, 2048)
+    def forward(self, x, labels=None, only_feat=False, only_det=False, embedding_out=None, img_size=None, **kwargs):
         '''
         x: a batch of images, e.g. shape(8,3,608,608)
         labels: a batch of ground truth
         '''
-        assert x.dim() == 4
-        self.img_size = x.shape[2:4]
+        assert int(embedding_out != None) + int(only_feat) + int(only_det) <= 1
 
-        # go through backbone
-        small, medium, large = self.backbone(x)
+        if embedding_out == 'small':
+            return self.feat_embedding_small(x)
+        elif embedding_out == 'medium':
+            return self.feat_embedding_medium(x)
+        elif embedding_out == 'large':
+            return self.feat_embedding_large(x)
 
+        if only_det:
+            assert len(x) == 3
+            small, medium, large = x
+        else:
+            # torch.cuda.reset_max_memory_allocated()
+            torch.cuda.reset_max_memory_allocated()
+            assert x.dim() == 4
+            img_size = x.shape[2]
+
+            # go through backbone
+            small, medium, large = self.backbone(x)
+
+            if only_feat:
+                return small, medium, large, torch.tensor([img_size]).cuda()
         # go through detection blocks in three scales
         detect_L, feature_L = self.branch_L(large, previous=None)
         detect_M, feature_M = self.branch_M(medium, previous=feature_L)
         detect_S, _ = self.branch_S(small, previous=feature_M)
 
         # process the boxes, and calculate loss if there is gt
-        boxes_L, loss_L = self.pred_L(detect_L, self.img_size, labels)
-        boxes_M, loss_M = self.pred_M(detect_M, self.img_size, labels)
-        boxes_S, loss_S = self.pred_S(detect_S, self.img_size, labels)
+        boxes_L, loss_L = self.pred_L(detect_L, img_size, labels)
+        boxes_M, loss_M = self.pred_M(detect_M, img_size, labels)
+        boxes_S, loss_S = self.pred_S(detect_S, img_size, labels)
 
         if labels is None:
             # assert boxes_L.dim() == 3
@@ -187,14 +209,14 @@ class PredLayer(nn.Module):
 
         if labels is None:
             # inference, convert final predictions to image space
-            pred_final[..., 0] *= img_hw[1]
-            pred_final[..., 1] *= img_hw[0]
+            pred_final[..., 0] *= img_hw
+            pred_final[..., 1] *= img_hw
             # self.dt_cache = pred_final.clone()
             return pred_final.view(nB, -1, nCH).detach(), None
         else:
             # training, convert final predictions to be normalized
-            pred_final[..., 2] /= img_hw[1]
-            pred_final[..., 3] /= img_hw[0]
+            pred_final[..., 2] /= img_hw
+            pred_final[..., 3] /= img_hw
             # force the normalized w and h to be <= 1
             pred_final[..., 0:4].clamp_(min=0, max=1)
 

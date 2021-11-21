@@ -4,6 +4,7 @@ script_*
 logs/
 results/
 deprecated/
+test_files/
 
 .vscode
 .DS_Store
