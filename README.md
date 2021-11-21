@@ -9,7 +9,7 @@
 * pytorch 1.9.0
 * opencv 4.5.0
 
-## Inference Guide
+## Inference Instructions
 * You can donwloade the weights of trained models from (Google Drive)[https://drive.google.com/drive/folders/1G66FOZT4gY56cw63twANtS_Tqf3j5AtO?usp=sharing]
 
 * Following code is tested with the example frames that can be downloaded from (Google Drive)[https://drive.google.com/file/d/1zcJcx1sOPD015sHpWy9OHVUlxXj2owFT/view?usp=sharing]. You need unzip this file and put `warehouse_samples` in `examples`.
