@@ -6,7 +6,7 @@ from tqdm import tqdm
 import torch
 import torchvision.transforms.functional as tvf
 
-from utils import visualization, dataloader, utils
+from utils import visualization, utils
 
 
 class Detector():
@@ -31,9 +31,6 @@ class Detector():
         if model_name == 'rapid':
             from models.rapid import RAPiD
             model = RAPiD(backbone='dark53')
-        elif model_name == 'rapid_export': # testing-only version
-            from models.rapid_export import RAPiD
-            model = RAPiD()
         else:
             raise NotImplementedError()
         total_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
@@ -94,21 +91,6 @@ class Detector():
             plt.imshow(np_img)
             plt.show()
         return detections
-        
-    def detect_imgSeq(self, img_dir, **kwargs):
-        '''
-        Run on a sequence of images in a folder.
-        
-        Args:
-            img_dir: str
-            input_size: int, input resolution
-            conf_thres: float, confidence threshold
-        '''
-        gt_path = kwargs['gt_path'] if 'gt_path' in kwargs else None
-
-        ims = dataloader.Images4Detector(img_dir, gt_path) # TODO
-        dts = self._detect_iter(iter(ims), **kwargs)
-        return dts
 
     def _detect_iter(self, iterator, **kwargs):
         detection_json = []

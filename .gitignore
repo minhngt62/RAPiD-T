@@ -4,7 +4,11 @@ script_*
 logs/
 results/
 deprecated/
-test_files/
+_test_files/
+/examples/*
+/outputs/*
+!/outputs/README.md
+!/examples/README.md
 
 .vscode
 .DS_Store
