@@ -4,7 +4,6 @@ script_*
 logs/
 results/
 deprecated/
-_test_files/
 /examples/*
 /outputs/*
 !/outputs/README.md
@@ -18,6 +17,7 @@ _test_files/
 *.pth
 *.onnx
 *.trt
+*.pckl
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

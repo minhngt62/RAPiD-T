@@ -16,6 +16,35 @@ def saveDets(
     detector, 
     vid_folder, 
     det_folder, 
+    img_ext=".png", 
+    conf_thres=0.3, 
+    use_nms=True, 
+    input_size=1024):
+
+    torch.cuda.reset_peak_memory_stats()
+    print(f"Confidence Threshold is {conf_thres}")
+    frame_paths = glob.glob(os.path.join(vid_folder, f"*{img_ext}"))
+    if not os.path.exists(det_folder):
+        os.makedirs(det_folder)
+
+    for frame_path in frame_paths:
+        frame_name = frame_path.split('/')[-1].split('.')[0]
+        detections = detector.detect_one(
+            img_path=frame_path,
+            return_img=False,
+            input_size=input_size,
+            conf_thres=conf_thres,
+            test_aug=None,
+            use_nms=use_nms,
+        )
+        np.savetxt(os.path.join(
+            det_folder, f"{frame_name}.txt"), detections, fmt="%.8f")
+
+
+def saveDetsFgfa(
+    detector, 
+    vid_folder, 
+    det_folder, 
     softmax_T=10,
     frame_diff=5, 
     img_ext=".png", 
@@ -136,7 +165,8 @@ def saveDets(
             det_folder, f"{frame_name}.txt"), detections, fmt="%.8f")
 
 
-def txt2json(det_folder, json_path):
+def txt2json(det_folder, json_path='', save_as_json=True):
+    assert (not save_as_json) or json_path, "'json_path' must be specified when save_as_json is True"
     detections = []
     det_paths = sorted(glob.glob(os.path.join(det_folder, "*.txt")))
     for det_path in det_paths:
@@ -151,8 +181,11 @@ def txt2json(det_folder, json_path):
                 "segmentation": []
             })
 
-    with open(json_path, 'w') as outfile:
-        json.dump(detections, outfile, indent=4)
+    if save_as_json:
+        with open(json_path, 'w') as outfile:
+            json.dump(detections, outfile, indent=4)
+    
+    return detections
 
 
 

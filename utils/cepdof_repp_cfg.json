@@ -1,0 +1,11 @@
+{
+	"min_tubelet_score": 0.1,
+	"add_unmatched": false,
+	"distance_func": "logreg",
+	"clf_thr": 0.7,
+	"clf_mode": "raw",
+	"recoordinate": false,
+	"recoordinate_std": 0.6,
+	"min_pred_score": 0.1,
+	"model_path": "./weights/matching_model_logreg_cepdof_dist5.pckl"
+}
