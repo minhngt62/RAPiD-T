@@ -1,6 +1,6 @@
 # RAPiD-T: Leveraging Temporal Information for People Detection from Overhead Fisheye Cameras
 
-**This repository is the original implemetation RAPiD-REPP, RAPiD-FA and RAPiD-FGFA. Corresponding paper will be published in [WACV 2022](https://wacv2022.thecvf.com/)**
+**This repository is the original implemetation RAPiD-REPP, RAPiD-FA and RAPiD-FGFA. Details of these algorithms can be found on our [project website](https://vip.bu.edu/projects/vsns/cossy/fisheye/rapid-t/) and the paper will be published at [WACV 2022](https://wacv2022.thecvf.com/)**
 
 * RAPiD-T is implemeted by combining [RAPiD](http://openaccess.thecvf.com/content_CVPRW_2020/html/w38/Duan_RAPiD_Rotation-Aware_People_Detection_in_Overhead_Fisheye_Images_CVPRW_2020_paper.html) with the SOTA object tracking algorithms designed for side-view regular cameras, namely [REPP](https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=9341600) and [FGFA](http://openaccess.thecvf.com/content_iccv_2017/html/Zhu_Flow-Guided_Feature_Aggregation_ICCV_2017_paper.html).
 * This repository is forked from [original repository of RAPiD](https://github.com/duanzhiihao/RAPiD).
