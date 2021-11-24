@@ -27,5 +27,7 @@
 RAPiD-T source code is available for non-commercial use. If you find our code and dataset useful or publish any work reporting results using this source code, please consider citing our paper
 
 ```
- M.O. Tezcan, Z. Duan, M. Cokbas, P. Ishwar, and J. Konrad, “WEPDTOF: A Dataset and Benchmark Algorithms for In-the-Wild People Detection and Tracking from Overhead Fisheye Cameras” in Proc. IEEE/CVF Winter Conf. on Applications of Computer Vision (WACV), 2022.
+ M.O. Tezcan, Z. Duan, M. Cokbas, P. Ishwar, and J. Konrad, “WEPDTOF: A Dataset and Benchmark 
+ Algorithms for In-the-Wild People Detection and Tracking from Overhead Fisheye Cameras” 
+ in Proc. IEEE/CVF Winter Conf. on Applications of Computer Vision (WACV), 2022.
  ```
