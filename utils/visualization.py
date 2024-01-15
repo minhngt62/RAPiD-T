@@ -34,14 +34,17 @@ def draw_dt_on_np(im, detections, print_dt=False, color=(255,0,0),
         if len(bb) == 6:
             x,y,w,h,a,conf = bb
         else:
-            x,y,w,h,a = bb[:5]
-            conf = -1
+            x,y,w,h, a, conf, track_id = bb[:7]
         if conf >= conf_thres:
             x1, y1 = x - w/2, y - h/2
+            x2, y2 = x + w/2, y + h/2
             if print_dt:
                 print(f'[{x} {y} {w} {h} {a}], confidence: {conf}')
             draw_xywha(im, x, y, w, h, a, color=color, linewidth=line_width)
             person_count += 1
+            if kwargs.get('show_id', True) and len(bb) > 6:
+                cv2.putText(im, f'id:{int(track_id)}', (int(x2),int(y2)), font, 1*text_size,
+                            (255,255,255), font_bold, cv2.LINE_AA)
             if kwargs.get('show_conf', True):
                 cv2.putText(im, f'{conf:.2f}', (int(x1),int(y1)), font, 1*text_size,
                             (255,255,255), font_bold, cv2.LINE_AA)

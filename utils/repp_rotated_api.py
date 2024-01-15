@@ -283,7 +283,7 @@ def det_arr_to_det_dict(
 
         if not image_id in im2wh:
             try:
-                im = cv2.imread(f"{root_dir_frames}/{image_id[:-7]}/{image_id}.png")[:, :, ::-1]
+                im = cv2.imread(f"{root_dir_frames}/{image_id}.png")[:, :, ::-1]
             except:
                 continue
 

@@ -127,6 +127,8 @@ def saveDetsFgfa(
             small_feat = detector.model(small, embedding_out="small")
             medium_feat = detector.model(medium, embedding_out="medium")
             large_feat = detector.model(large, embedding_out="large")
+            
+            #print(small_feat.shape)
             small_w = torch.cat((small_w, softmax_T * torch.unsqueeze(cos_sim(small_feat[0], small_k_feat[0]), 0)))
             medium_w = torch.cat((medium_w, softmax_T * torch.unsqueeze(cos_sim(medium_feat[0], medium_k_feat[0]), 0)))
             large_w = torch.cat((large_w, softmax_T * torch.unsqueeze(cos_sim(large_feat[0], large_k_feat[0]), 0)))
